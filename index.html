@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Recherche Wikipedia</title>
+        <meta charset="utf-8" />
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" crossorigin="anonymous">
+    </head>
+    <body>
+        <header class="jumbotron">
+            <form class="form-inline container">
+                <h1>WikiSearch</h1>
+
+                <label>
+                    Mots-clés :
+                    <input type="search" name="search" class="form-control"  placeholder="Tapez votre recherche ici" />
+                </label>
+                <input type="submit" class="btn btn-primary" value="lancer la recherche" />
+            </form>
+        </header>
+        <section class="col-md-6 resultsContainer">
+            <h2 class="page-header">Résultats</h2>
+
+            <ul class="list-group results">
+                <!-- exemple de DOM pour un rendu optimal -->
+                <!-- <li class="list-group-item clearfix">
+                        <a href="#">
+                                <h3 class="list-group-item-heading">titre</h3>
+                                <p class="list-group-item-text">résumé</p>
+                        </a>
+                </li> -->
+            </ul>
+        </section>
+        <section class="col-md-6 detailContainer">
+            <h2 class="page-header">Détail</h2>
+            <h3></h3>
+            <p></p>
+            <!-- le contenu du h3 et du p vont être créés en JS -->
+        </section>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>

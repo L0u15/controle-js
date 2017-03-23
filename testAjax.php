@@ -1,0 +1,1 @@
+les parametres sont <?=$_GET['search']?>
