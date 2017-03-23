@@ -26,7 +26,7 @@ var getHttpRequest = function () {
     }
 
     return httpRequest;
-}
+};
 
 /**
  * Vérifie que la recherche n'este pas vide
@@ -54,7 +54,7 @@ var addResultToList = function (result) {
     li.children('a').append(baliseTitle);
     li.children('a').append(baliseSnippet);
     $('.list-group.results').append(li);
-}
+};
 
 /**
  * Ajoute tous les resultats à la liste
@@ -64,7 +64,7 @@ var addAllResultsToList = function (results) {
     for (var i = 0; i < results.length; i++) {
         addResultToList(results[i]);
     }
-}
+};
 
 /**
  * Récupère et affiche les résultats depuis Wikipédia
@@ -76,8 +76,8 @@ var loadResultsFromWikipedia = function (research) {
     var httpRequest = getHttpRequest();
     httpRequest.open('GET', 'proxy.php?search=' + research, true);
     httpRequest.onreadystatechange = function () {
-        if (httpRequest.readyState == 4) {
-            if (httpRequest.status == 200) {
+        if (httpRequest.readyState === 4) {
+            if (httpRequest.status === 200) {
                 //Si la requette s'est bien terminée, on affiche les résultats
 
                 //On vide les anciens résultats
@@ -93,47 +93,77 @@ var loadResultsFromWikipedia = function (research) {
 
 
         }
-    }
+    };
     httpRequest.send();
-}
+};
 
 /**
- * 
- * @param {type} param
+ * NON UTILISE
+ * Pour utiliser cette methode, il faut remettre le script php d'origine
+ * Récupère et affiche l'article non parsé depuis wikipédia
+ * @param {txt} title
  */
 var loadArticleFromWikipedia = function (title) {
     var httpRequest = getHttpRequest();
     httpRequest.open('GET', 'proxy.php?title=' + title, true);
     httpRequest.onreadystatechange = function () {
         //La requette est terminée
-        if (httpRequest.readyState == 4) {
+        if (httpRequest.readyState === 4) {
             //La requette s'est bien terminée
-            if (httpRequest.status == 200) {
+            if (httpRequest.status === 200) {
 
                 //On vide les anciens résultats
                 $('.col-md-6.detailContainer h3, .col-md-6.detailContainer p').html("");
-                
+
                 //On récupère et parse le la réponse
                 var pages = (JSON.parse(httpRequest.responseText)).query.pages;
-                
+
                 //On récupère l'id de l'article
-                var pageid =[];
-                for(var id in pages){
+                var pageid = [];
+                for (var id in pages) {
                     pageid.push(id);
                 }
-              
+
                 //On récupère les informations
                 var title = pages[pageid]['title'];
                 var wikitext = pages[pageid]['revisions'][0]['*'];
-                
+
                 //On affiche les informations
                 $('.col-md-6.detailContainer h3').html(title);
                 $('.col-md-6.detailContainer p').html(wikitext);
             }
         }
-    }
+    };
     httpRequest.send();
-}
+};
+
+var loadParsedArticleFromWikipedia = function (title) {
+    var httpRequest = getHttpRequest();
+    httpRequest.open('GET', 'proxy.php?title=' + title, true);
+    httpRequest.onreadystatechange = function () {
+        //La requette est terminée
+        if (httpRequest.readyState === 4) {
+            //La requette s'est bien terminée
+            if (httpRequest.status === 200) {
+
+                //On vide les anciens résultats
+                $('.col-md-6.detailContainer h3, .col-md-6.detailContainer p').html("");
+
+                //On récupère et parse le la réponse
+                var content = (JSON.parse(httpRequest.responseText)).parse;
+
+                //On récupère les informations
+                var title = content['title'];
+                var wikitext = content['text']['*'];
+                debugger;
+                //On affiche les informations
+                $('.col-md-6.detailContainer h3').html(title);
+                $('.col-md-6.detailContainer p').html(wikitext);
+            }
+        }
+    };
+    httpRequest.send();
+};
 
 /**
  * Récupère le titre de l'élément cliqué et récupère le contenu correspondant
@@ -142,8 +172,21 @@ var loadDetail = function () {
     event.preventDefault();
     var title = $(this).children("a").children("h3").html();
 
-    loadArticleFromWikipedia(title);
+    loadParsedArticleFromWikipedia(title);
 }
+
+var displayLoader = function () {
+    var loader = $('div');
+
+
+};
+
+var removeLoader = function () {
+
+    $(".form-inline.container").remove("p");
+
+
+};
 
 //FONCTION PRINCIPALE
 $(document).ready(function () {
@@ -153,7 +196,6 @@ $(document).ready(function () {
 
         //On empêche le comportement par défault
         event.preventDefault();
-
         //On récupère la saisie de l'utilisateur
         var research = $("input[name='search']").val();
         //On vérifie la saisie
